@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoAttend", "AutoAttend\AutoAttend.csproj", "{EF1F9935-EB27-4CC2-9E18-781A58960907}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedNativeWifi", "ManagedNativeWifi\ManagedNativeWifi.csproj", "{1C28451C-49CC-42C9-A297-E7D143C7195B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF1F9935-EB27-4CC2-9E18-781A58960907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1F9935-EB27-4CC2-9E18-781A58960907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1F9935-EB27-4CC2-9E18-781A58960907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1F9935-EB27-4CC2-9E18-781A58960907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C28451C-49CC-42C9-A297-E7D143C7195B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C28451C-49CC-42C9-A297-E7D143C7195B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C28451C-49CC-42C9-A297-E7D143C7195B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C28451C-49CC-42C9-A297-E7D143C7195B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
