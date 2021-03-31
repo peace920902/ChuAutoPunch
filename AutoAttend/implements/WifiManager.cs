@@ -42,5 +42,14 @@ namespace AutoAttend
                 return false;
             }
         }
+
+        public async Task DisConnectWifi()
+        {
+            var wireless = NativeWifi.EnumerateAvailableNetworks().FirstOrDefault(x => x.Ssid.ToString().Equals("wireless"));
+            if (wireless != null)
+            {
+                await NativeWifi.DisconnectNetworkAsync(wireless.Interface.Id, TimeSpan.FromSeconds(30));
+            }
+        }
     }
 }

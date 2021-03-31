@@ -37,6 +37,8 @@ namespace AutoAttend
                 _errorHandler.HandleError();
             else
                 await _seleniumManipulator.Exec();
+
+            //await _wifiManager.DisConnectWifi();
         }
     }
 }
