@@ -64,43 +64,38 @@ namespace AutoAttend.implements
             _driver.Navigate().GoToUrl(_chuUrl);
             var findElements = _driver.FindElements(By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/h1/span"));
             return _driver.Url == _chuUrl &&
-                   findElements!=null &&
-                   findElements.Any()&&
+                   findElements != null &&
+                   findElements.Any() &&
                    !string.IsNullOrEmpty(findElements.First().Text);
         }
 
         private void AutoLogin()
         {
-            _logger.Log(LogLevel.Information,"Start attend");
+            _logger.Log(LogLevel.Information, "Start attend");
             _driver.FindElement(By.Id("txtAccount")).SendKeys(_configuration[UserName]);
             _driver.FindElement(By.Id("txtPwd")).SendKeys(_configuration[Password]);
 
-            var submitBy = By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/div/form/fieldset/input[1]");
-            ClickButton(_driver, submitBy, "submit");
+            ClickButton(_driver, By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/div/form/fieldset/input[1]"), "submit");
             Thread.Sleep(3000);
-            var courseBy = By.XPath(@"/html/body/div[2]/div[2]/div/div/section[1]/div/aside/section/div/div/div[1]/div[2]/div/div/div[1]/div/ul/li/div/div[1]/a");
-            ClickButton(_driver, courseBy, "course");
+            ClickButton(_driver, By.XPath(@"/html/body/div[2]/div[2]/div/div/section[1]/div/aside/section/div/div/div[1]/div[2]/div/div/div[1]/div/ul/li/div/div[1]/a"), "course");
             Thread.Sleep(3000);
-            var attendBy = By.XPath("/html/body/div[1]/div[2]/div/div/section[1]/div/div[2]/ul/li/div[3]/ul/li[2]/div/div/div[2]/div/a");
-            ClickButton(_driver, attendBy, "attend");
+            ClickButton(_driver, By.XPath("/html/body/div[1]/div[2]/div/div/section[1]/div/div[2]/ul/li/div[3]/ul/li[2]/div/div/div[2]/div/a"), "attend");
             if (!bool.Parse(_configuration[Define.Auto]))
             {
                 Thread.Sleep(int.Parse(_configuration[Define.ManualTimeOut]));
                 return;
             }
-            // var punchCardBy = By.XPath(@"/html/body/div[1]/div[2]/div/div/section/div[1]/div[1]/a");
-            // ClickButton(punchCardBy, "punchCard");
-
+            
+            ClickButton(_driver, By.XPath(@"/html/body/div[1]/div[2]/div/div/section/div[1]/div[1]/a"), "punchCard");
             if (bool.Parse(_configuration[Define.WindowMode]))
                 Thread.Sleep(int.Parse(_configuration[Define.WindowModeCheckedTime]));
-            
+
             _logger.Log(LogLevel.Information, "stop attend");
         }
 
         private void ClickButton(IWebDriver webDriver, By by, string buttonName)
         {
-            
-            while ( CheckIfNetworkChanged(webDriver))
+            while (CheckIfNetworkChanged(webDriver))
             {
                 Thread.Sleep(3000);
                 webDriver.Navigate().Refresh();

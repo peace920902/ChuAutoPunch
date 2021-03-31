@@ -32,7 +32,7 @@ namespace AutoAttend
                 }
                 errorTimes++;
             }
-
+            
             if (!flag)
                 _errorHandler.HandleError();
             else
