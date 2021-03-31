@@ -1,11 +1,11 @@
 ﻿{
   "NetworkProfile": {
-    "Account": "35f9@ondemand",
-    "Password": "87598d9w"
+    "Account": "",
+    "Password": ""
   },
   "UserProfile": {
-    "UserName": "RREL110008",
-    "Password": "Chu201183"
+    "UserName": "",
+    "Password": ""
   },
   "MaxErrorTimes": 10,
   "MaxWifiConnectTimes": 5,
