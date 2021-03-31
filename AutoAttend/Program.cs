@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoAttend.implements;
 using AutoAttend.Interface;
-using ManagedNativeWifi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Serilog;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace AutoAttend
 {
-    class Program
+    internal class Program
     {
         public static async Task Main(string[] args)
         {
@@ -46,16 +43,16 @@ namespace AutoAttend
             services.AddLogging(x =>
             {
                 x.AddSerilog();
-                x.AddConsole();
             });
             var config = new ConfigurationBuilder()
-                .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsetting.json", false, true)
                 .Build();
             services.AddSingleton<IConfiguration>(config);
             //services.Configure<UserProfile>(config.GetSection(Define.UserProfile));
             var chromeOptions = new ChromeOptions();
-            if(!bool.Parse(config[Define.WindowMode]))
+            if (!bool.Parse(config[Define.WindowMode]))
                 chromeOptions.AddArguments("--headless");
+            services.AddSingleton<IWebDriverFactory, WebDriverFactory>();
             services.AddSingleton<IWebDriver>(new ChromeDriver(chromeOptions));
             services.AddSingleton<IErrorHandler, ErrorHandler>();
             services.AddSingleton<ISeleniumManipulator, SeleniumManipulator>();

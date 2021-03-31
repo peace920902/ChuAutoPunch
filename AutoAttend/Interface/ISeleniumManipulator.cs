@@ -5,5 +5,6 @@ namespace AutoAttend.Interface
     public interface ISeleniumManipulator
     {
         Task Exec();
+        void LoginWifi();
     }
 }

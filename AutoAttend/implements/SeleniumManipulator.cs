@@ -5,25 +5,30 @@ using AutoAttend.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace AutoAttend.implements
 {
     public class SeleniumManipulator : ISeleniumManipulator
     {
+        private const string UserName = "UserProfile:UserName";
+        private const string Password = "UserProfile:Password";
+        private const string AuthName = "NetworkProfile:Account";
+        private const string AuthPass = "NetworkProfile:Password";
+        private readonly string _chuUrl;
         private readonly IConfiguration _configuration;
         private readonly IWebDriver _driver;
         private readonly IErrorHandler _errorHandler;
-        private const string UserName = "UserProfile:UserName";
-        private const string Password = "UserProfile:Password";
-        private readonly string _chuUrl;
+        private readonly IWebDriver _wifiDriver;
+        private readonly ILogger<SeleniumManipulator> _logger;
 
-        public SeleniumManipulator(IConfiguration configuration, IWebDriver driver, IErrorHandler errorHandler)
+        public SeleniumManipulator(IConfiguration configuration, IWebDriverFactory webDriverFactory, IWebDriver driver, IErrorHandler errorHandler, ILogger<SeleniumManipulator> logger)
         {
             _configuration = configuration;
+            _wifiDriver = webDriverFactory.Create();
             _driver = driver;
             _errorHandler = errorHandler;
+            _logger = logger;
             _chuUrl = _configuration["ChuUrl"];
         }
 
@@ -36,6 +41,17 @@ namespace AutoAttend.implements
                 _driver.Close();
         }
 
+        public void LoginWifi()
+        {
+            _logger.Log(LogLevel.Information, "start wifi login");
+            _wifiDriver.Navigate().GoToUrl(_configuration[Define.WifiUrl]);
+            _wifiDriver.FindElement(By.Id("auth_user")).SendKeys(_configuration[AuthName]);
+            _wifiDriver.FindElement(By.Name("auth_pass")).SendKeys(_configuration[AuthPass]);
+            ClickButton(_wifiDriver, By.Name("accept"), "wifi log in");
+            _logger.Log(LogLevel.Information, "stop wifi login");
+            _wifiDriver.Close();
+        }
+
         private bool NavToInternet()
         {
             if (NavToChu()) return true;
@@ -46,22 +62,27 @@ namespace AutoAttend.implements
         private bool NavToChu()
         {
             _driver.Navigate().GoToUrl(_chuUrl);
-            return _driver.Url == _chuUrl && !string.IsNullOrEmpty(_driver.FindElement(By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/h1/span")).Text);
+            var findElements = _driver.FindElements(By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/h1/span"));
+            return _driver.Url == _chuUrl &&
+                   findElements!=null &&
+                   findElements.Any()&&
+                   !string.IsNullOrEmpty(findElements.First().Text);
         }
 
         private void AutoLogin()
         {
+            _logger.Log(LogLevel.Information,"Start attend");
             _driver.FindElement(By.Id("txtAccount")).SendKeys(_configuration[UserName]);
             _driver.FindElement(By.Id("txtPwd")).SendKeys(_configuration[Password]);
 
             var submitBy = By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/div/form/fieldset/input[1]");
-            ClickButton(submitBy, "submit");
+            ClickButton(_driver, submitBy, "submit");
             Thread.Sleep(3000);
             var courseBy = By.XPath(@"/html/body/div[2]/div[2]/div/div/section[1]/div/aside/section/div/div/div[1]/div[2]/div/div/div[1]/div/ul/li/div/div[1]/a");
-            ClickButton(courseBy, "course");
+            ClickButton(_driver, courseBy, "course");
             Thread.Sleep(3000);
             var attendBy = By.XPath("/html/body/div[1]/div[2]/div/div/section[1]/div/div[2]/ul/li/div[3]/ul/li[2]/div/div/div[2]/div/a");
-            ClickButton(attendBy, "attend");
+            ClickButton(_driver, attendBy, "attend");
             if (!bool.Parse(_configuration[Define.Auto]))
             {
                 Thread.Sleep(int.Parse(_configuration[Define.ManualTimeOut]));
@@ -69,22 +90,38 @@ namespace AutoAttend.implements
             }
             // var punchCardBy = By.XPath(@"/html/body/div[1]/div[2]/div/div/section/div[1]/div[1]/a");
             // ClickButton(punchCardBy, "punchCard");
-            
-            if(bool.Parse(_configuration[Define.WindowMode]))
+
+            if (bool.Parse(_configuration[Define.WindowMode]))
                 Thread.Sleep(int.Parse(_configuration[Define.WindowModeCheckedTime]));
+            
+            _logger.Log(LogLevel.Information, "stop attend");
         }
 
-        private void ClickButton(By by, string buttonName)
+        private void ClickButton(IWebDriver webDriver, By by, string buttonName)
         {
-            var button = _driver.FindElements(by);
+            
+            while ( CheckIfNetworkChanged(webDriver))
+            {
+                Thread.Sleep(3000);
+                webDriver.Navigate().Refresh();
+            }
+
+            var button = webDriver.FindElements(by);
+
             while (button == null || !button.Any())
             {
                 _errorHandler.LogErrorAndDelay($"{buttonName} button not found");
                 if (_errorHandler.CheckError()) _errorHandler.HandleError();
-                button = _driver.FindElements(by);
+                button = webDriver.FindElements(by);
             }
 
             button.First().Click();
+        }
+
+        private bool CheckIfNetworkChanged(IWebDriver webDriver)
+        {
+            var errorCodes = webDriver.FindElements(By.ClassName("error-code"));
+            return errorCodes == null || errorCodes.Any();
         }
     }
 }
