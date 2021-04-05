@@ -19,14 +19,15 @@ namespace AutoAttend
             {
                 Log.Logger = new LoggerConfiguration()
                     .WriteTo.Console()
-                    .WriteTo.File("log.txt")
+                    .WriteTo.File(@"C:\log.txt")
                     .MinimumLevel.Information()
                     .CreateLogger();
                 Log.Logger.Information("Auto attend start");
 
                 var services = new ServiceCollection();
                 ConfigureService(services);
-                await services.BuildServiceProvider().GetService<Worker>()?.Run(args);
+                
+                await services.BuildServiceProvider().GetService<Worker>().Run(args);
             }
             catch (Exception e)
             {

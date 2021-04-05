@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoAttend.Interface;
 using ManagedNativeWifi;
+using Microsoft.Extensions.Logging;
 
 namespace AutoAttend
 {
@@ -10,21 +12,24 @@ namespace AutoAttend
     {
         private readonly IErrorHandler _errorHandler;
         private readonly ISeleniumManipulator _seleniumManipulator;
+        private readonly ILogger<WifiManager> _logger;
 
-        public WifiManager(IErrorHandler errorHandler, ISeleniumManipulator seleniumManipulator)
+        public WifiManager(IErrorHandler errorHandler, ISeleniumManipulator seleniumManipulator, ILogger<WifiManager> logger)
         {
             _errorHandler = errorHandler;
             _seleniumManipulator = seleniumManipulator;
+            _logger = logger;
         }
 
         public async Task<bool> ConnectToWifi()
         {
             try
             {
-                var wireless = NativeWifi.EnumerateAvailableNetworks().FirstOrDefault(x => x.Ssid.ToString().Equals("wireless"));
+                var wireless = NativeWifi.EnumerateAvailableNetworks().FirstOrDefault(x => string.Equals(x.Ssid.ToString(), "wireless", StringComparison.CurrentCultureIgnoreCase));
                 if (wireless != null)
                 {
-                    await NativeWifi.ConnectNetworkAsync(wireless.Interface.Id, wireless.ProfileName, wireless.BssType, TimeSpan.FromSeconds(30));
+                    _logger.Log(LogLevel.Information, JsonSerializer.Serialize(wireless));
+                    await NativeWifi.ConnectNetworkAsync(wireless.Interface.Id, wireless.ProfileName ?? "wireless", wireless.BssType, TimeSpan.FromSeconds(30));
                     _seleniumManipulator.LoginWifi();
                     return true;
                 }

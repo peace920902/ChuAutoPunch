@@ -76,9 +76,9 @@ namespace AutoAttend.implements
             _driver.FindElement(By.Id("txtPwd")).SendKeys(_configuration[Password]);
 
             ClickButton(_driver, By.XPath(@"/html/body/div[3]/div[1]/div/div[2]/div/div/div/form/fieldset/input[1]"), "submit");
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
             ClickButton(_driver, By.XPath(@"/html/body/div[2]/div[2]/div/div/section[1]/div/aside/section/div/div/div[1]/div[2]/div/div/div[1]/div/ul/li/div/div[1]/a"), "course");
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
             ClickButton(_driver, By.XPath("/html/body/div[1]/div[2]/div/div/section[1]/div/div[2]/ul/li/div[3]/ul/li[2]/div/div/div[2]/div/a"), "attend");
             if (!bool.Parse(_configuration[Define.Auto]))
             {
