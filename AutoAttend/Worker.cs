@@ -10,10 +10,13 @@ namespace AutoAttend
         private readonly int _maxWifiConnectTimes;
         private readonly ISeleniumManipulator _seleniumManipulator;
         private readonly IWifiManager _wifiManager;
-
+        private readonly bool _isAutoConnectWifi;
+        
+        
         public Worker(IConfiguration config, IWifiManager wifiManager, ISeleniumManipulator seleniumManipulator, IErrorHandler errorHandler)
         {
             _maxWifiConnectTimes = int.Parse(config[Define.MaxWifiConnectTimes]);
+            _isAutoConnectWifi = bool.Parse(config[Define.IsAutoConnectWifi]);
             _wifiManager = wifiManager;
             _seleniumManipulator = seleniumManipulator;
             _errorHandler = errorHandler;
@@ -23,6 +26,13 @@ namespace AutoAttend
         {
             var errorTimes = 0;
             var flag = false;
+
+            if (!_isAutoConnectWifi)
+            {
+                await _seleniumManipulator.Exec();
+                return;
+            }
+            
             while (errorTimes < _maxWifiConnectTimes)
             {
                 if (await _wifiManager.ConnectToWifi())

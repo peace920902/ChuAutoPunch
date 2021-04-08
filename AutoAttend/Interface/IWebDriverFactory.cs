@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 
 namespace AutoAttend.Interface
 {
     public interface IWebDriverFactory
     {
-        IWebDriver Create();
+        Lazy<IWebDriver> Create();
     }
 }

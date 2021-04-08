@@ -10,5 +10,6 @@
         public const string ManualTimeOut = "ManualTimeOut";
         public const string WindowModeCheckedTime = "WindowModeCheckedTime";
         public const string WifiUrl = "WifiUrl";
+        public const string IsAutoConnectWifi = "IsAutoConnectWifi";
     }
 }

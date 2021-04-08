@@ -1,4 +1,5 @@
-﻿using AutoAttend.Interface;
+﻿using System;
+using AutoAttend.Interface;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,12 +15,12 @@ namespace AutoAttend.implements
             _configuration = configuration;
         }
 
-        public IWebDriver Create()
+        public Lazy<IWebDriver> Create()
         {
             var chromeOptions = new ChromeOptions();
             if (!bool.Parse(_configuration[Define.WindowMode]))
                 chromeOptions.AddArguments("--headless");
-            return new ChromeDriver(chromeOptions);
+            return new Lazy<IWebDriver>(new ChromeDriver(chromeOptions));
         }
     }
 }

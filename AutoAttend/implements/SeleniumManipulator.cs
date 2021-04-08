@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoAttend.Interface;
@@ -19,13 +20,13 @@ namespace AutoAttend.implements
         private readonly IConfiguration _configuration;
         private readonly IWebDriver _driver;
         private readonly IErrorHandler _errorHandler;
-        private readonly IWebDriver _wifiDriver;
+        private readonly Lazy<IWebDriver> _wifiDriver;
         private readonly ILogger<SeleniumManipulator> _logger;
 
         public SeleniumManipulator(IConfiguration configuration, IWebDriverFactory webDriverFactory, IWebDriver driver, IErrorHandler errorHandler, ILogger<SeleniumManipulator> logger)
         {
             _configuration = configuration;
-            _wifiDriver = webDriverFactory.Create();
+            if(bool.Parse(_configuration[Define.IsAutoConnectWifi])) _wifiDriver = webDriverFactory.Create();
             _driver = driver;
             _errorHandler = errorHandler;
             _logger = logger;
@@ -44,12 +45,12 @@ namespace AutoAttend.implements
         public void LoginWifi()
         {
             _logger.Log(LogLevel.Information, "start wifi login");
-            _wifiDriver.Navigate().GoToUrl(_configuration[Define.WifiUrl]);
-            _wifiDriver.FindElement(By.Id("auth_user")).SendKeys(_configuration[AuthName]);
-            _wifiDriver.FindElement(By.Name("auth_pass")).SendKeys(_configuration[AuthPass]);
-            ClickButton(_wifiDriver, By.Name("accept"), "wifi log in");
+            _wifiDriver.Value.Navigate().GoToUrl(_configuration[Define.WifiUrl]);
+            _wifiDriver.Value.FindElement(By.Id("auth_user")).SendKeys(_configuration[AuthName]);
+            _wifiDriver.Value.FindElement(By.Name("auth_pass")).SendKeys(_configuration[AuthPass]);
+            ClickButton(_wifiDriver.Value, By.Name("accept"), "wifi log in");
             _logger.Log(LogLevel.Information, "stop wifi login");
-            _wifiDriver.Close();
+            _wifiDriver.Value.Close();
         }
 
         private bool NavToInternet()
@@ -80,7 +81,7 @@ namespace AutoAttend.implements
             ClickButton(_driver, By.XPath(@"/html/body/div[2]/div[2]/div/div/section[1]/div/aside/section/div/div/div[1]/div[2]/div/div/div[1]/div/ul/li/div/div[1]/a"), "course");
             Thread.Sleep(1000);
             ClickButton(_driver, By.XPath("/html/body/div[1]/div[2]/div/div/section[1]/div/div[2]/ul/li/div[3]/ul/li[2]/div/div/div[2]/div/a"), "attend");
-            if (!bool.Parse(_configuration[Define.Auto]))
+            if (!bool.Parse(_configuration[Define.Auto])||!bool.Parse(_configuration[Define.IsAutoConnectWifi]))
             {
                 Thread.Sleep(int.Parse(_configuration[Define.ManualTimeOut]));
                 return;

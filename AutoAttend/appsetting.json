@@ -14,5 +14,6 @@
   "WindowMode": true,
   "ManualTimeOut": 1800000,
   "WindowModeCheckedTime": 10000,
-  "WifiUrl": "https://wifi.chu.edu.tw:8009/index.php?zone=wifi_forward&redirurl=http%3A%2F%2Fwww.gstatic.com%2Fgenerate_204"
+  "WifiUrl": "https://wifi.chu.edu.tw:8009/index.php?zone=wifi_forward&redirurl=http%3A%2F%2Fwww.gstatic.com%2Fgenerate_204",
+  "IsAutoConnectWifi": true
 }
