@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using static ManagedNativeWifi.Win.NativeMethod;
+using static ManagedNativeWifi.Win32.NativeMethod;
 
-using Base = ManagedNativeWifi.Win.BaseMethod;
+using Base = ManagedNativeWifi.Win32.BaseMethod;
 
 namespace ManagedNativeWifi
 {

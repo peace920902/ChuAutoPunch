@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static ManagedNativeWifi.Win.NativeMethod;
+using static ManagedNativeWifi.Win32.NativeMethod;
 
 namespace ManagedNativeWifi
 {

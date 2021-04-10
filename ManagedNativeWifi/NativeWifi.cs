@@ -8,8 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using ManagedNativeWifi.Common;
-using static ManagedNativeWifi.Win.NativeMethod;
-using Base = ManagedNativeWifi.Win.BaseMethod;
+using static ManagedNativeWifi.Win32.NativeMethod;
+using Base = ManagedNativeWifi.Win32.BaseMethod;
 
 namespace ManagedNativeWifi
 {

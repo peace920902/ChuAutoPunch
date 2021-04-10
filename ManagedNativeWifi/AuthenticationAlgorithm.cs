@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using static ManagedNativeWifi.Win.NativeMethod;
+﻿using ManagedNativeWifi.Win32;
 
 namespace ManagedNativeWifi
 {
@@ -85,44 +79,44 @@ namespace ManagedNativeWifi
 
 	internal static class AuthenticationAlgorithmConverter
 	{
-		public static bool TryConvert(DOT11_AUTH_ALGORITHM source, out AuthenticationAlgorithm authenticationAlgorithm)
+		public static bool TryConvert(NativeMethod.DOT11_AUTH_ALGORITHM source, out AuthenticationAlgorithm authenticationAlgorithm)
 		{
 			switch (source)
 			{
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_80211_OPEN:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_80211_OPEN:
 					authenticationAlgorithm = AuthenticationAlgorithm.Open;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_80211_SHARED_KEY:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_80211_SHARED_KEY:
 					authenticationAlgorithm = AuthenticationAlgorithm.Shared;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA:
 					authenticationAlgorithm = AuthenticationAlgorithm.WPA;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA_PSK:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA_PSK:
 					authenticationAlgorithm = AuthenticationAlgorithm.WPA_PSK;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA_NONE:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA_NONE:
 					authenticationAlgorithm = AuthenticationAlgorithm.WPA_NONE;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_RSNA:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_RSNA:
 					authenticationAlgorithm = AuthenticationAlgorithm.RSNA;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_RSNA_PSK:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_RSNA_PSK:
 					authenticationAlgorithm = AuthenticationAlgorithm.RSNA_PSK;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA3:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA3:
 					authenticationAlgorithm = AuthenticationAlgorithm.WPA3;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA3_SAE:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_WPA3_SAE:
 					authenticationAlgorithm = AuthenticationAlgorithm.WPA3_SAE;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_OWE:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_OWE:
 					authenticationAlgorithm = AuthenticationAlgorithm.OWE;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_IHV_START:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_IHV_START:
 					authenticationAlgorithm = AuthenticationAlgorithm.IHV_START;
 					return true;
-				case DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_IHV_END:
+				case NativeMethod.DOT11_AUTH_ALGORITHM.DOT11_AUTH_ALGO_IHV_END:
 					authenticationAlgorithm = AuthenticationAlgorithm.IHV_END;
 					return true;
 			}
